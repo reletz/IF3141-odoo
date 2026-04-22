@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Top menu item -->
+        <menuitem id="menu_bts_reminder_root" name="BTS Reminder" sequence="10"/>
+
+        <!-- Action -->
+        <record id="action_bts_reminder" model="ir.actions.act_window">
+            <field name="name">BTS Reminders</field>
+            <field name="res_model">bts.reminder</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- Menu categories -->
+        <menuitem id="menu_bts_reminder_category" name="Reminders" parent="menu_bts_reminder_root" sequence="10"/>
+        
+        <!-- Menu actions -->
+        <menuitem id="menu_bts_reminder_action" name="All Reminders" parent="menu_bts_reminder_category" action="action_bts_reminder" sequence="10"/>
+    </data>
+</odoo>
