@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data noupdate="1">
+    <data>
         <record id="module_category_bts_reminder" model="ir.module.category">
             <field name="name">BTS Reminder</field>
             <field name="description">Hak Akses Modul BTS Reminder</field>
@@ -16,6 +16,7 @@
             <field name="name">Kepala Bengkel</field>
             <field name="category_id" ref="module_category_bts_reminder"/>
             <field name="implied_ids" eval="[(4, ref('group_frontline'))]"/>
+            <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
         </record>
     </data>
 </odoo>
