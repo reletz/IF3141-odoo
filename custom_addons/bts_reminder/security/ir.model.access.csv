@@ -1,2 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_bts_reminder,access_bts_reminder,model_bts_reminder,base.group_user,1,1,1,1
+access_bts_service_history,access_bts_service_history,model_bts_service_history,base.group_user,1,1,1,1

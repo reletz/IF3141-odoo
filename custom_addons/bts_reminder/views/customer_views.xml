@@ -44,6 +44,14 @@
                             <group>
                                 <field name="last_service_date" readonly="1"/>
                             </group>
+                            <field name="service_history_ids" readonly="1" colspan="2" nolabel="1">
+                                <tree>
+                                    <field name="name" string="Tipe Servis"/>
+                                    <field name="km_interval" string="KM"/>
+                                    <field name="cost" string="Biaya"/>
+                                    <field name="service_date" string="Tanggal"/>
+                                </tree>
+                            </field>
                         </group>
                     </sheet>
                 </form>
@@ -60,8 +68,24 @@
                     <field name="whatsapp_number"/>
                     <field name="license_plate"/>
                     <field name="vehicle_type"/>
+                    <field name="last_service_date"/>
                     <field name="is_active_customer" widget="boolean_toggle"/>
                 </tree>
+            </field>
+        </record>
+
+        <!-- Search View -->
+        <record id="view_bts_customer_search" model="ir.ui.view">
+            <field name="name">bts.customer.search</field>
+            <field name="model">res.partner</field>
+            <field name="arch" type="xml">
+                <search string="Cari Data Pelanggan">
+                    <field name="name" string="Nama Pelanggan"/>
+                    <field name="license_plate" string="Nomor Polisi"/>
+                    <field name="whatsapp_number" string="Nomor WhatsApp"/>
+                    <separator/>
+                    <filter string="Pelanggan Aktif" name="active_customers" domain="[('is_active_customer', '=', True)]"/>
+                </search>
             </field>
         </record>
 

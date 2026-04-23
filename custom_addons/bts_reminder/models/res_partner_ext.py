@@ -28,12 +28,19 @@ class ResPartner(models.Model):
 
     last_service_date = fields.Date(string="Tanggal Servis Terakhir", compute="_compute_service_dates", store=True)
     first_service_date = fields.Date(string="Tanggal Servis Pertama", compute="_compute_service_dates", store=True)
+    
+    service_history_ids = fields.One2many('bts.service.history', 'customer_id', string="Riwayat Servis")
 
-    @api.depends() # Dependency will be added once service_history model is created
+    @api.depends('service_history_ids', 'service_history_ids.service_date')
     def _compute_service_dates(self):
         for record in self:
-            record.last_service_date = False
-            record.first_service_date = False
+            histories = record.service_history_ids.sorted(key=lambda h: h.service_date)
+            if histories:
+                record.first_service_date = histories[0].service_date
+                record.last_service_date = histories[-1].service_date
+            else:
+                record.first_service_date = False
+                record.last_service_date = False
 
     @api.constrains('whatsapp_number', 'license_plate')
     def _check_duplicate_customer(self):
