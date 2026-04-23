@@ -9,9 +9,11 @@
     'author': 'Your Name',
     'depends': ['base'],
     'data': [
+        'security/security.xml',
         'security/ir.model.access.csv',
         'views/customer_views.xml',
         'views/service_history_views.xml',
+        'views/reminder_parameter_views.xml',
         'views/menus.xml',
     ],
     'installable': True,

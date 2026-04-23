@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="module_category_bts_reminder" model="ir.module.category">
+            <field name="name">BTS Reminder</field>
+            <field name="description">Hak Akses Modul BTS Reminder</field>
+            <field name="sequence">20</field>
+        </record>
+
+        <record id="group_frontline" model="res.groups">
+            <field name="name">Frontline / Service Advisor</field>
+            <field name="category_id" ref="module_category_bts_reminder"/>
+        </record>
+
+        <record id="group_kepala_bengkel" model="res.groups">
+            <field name="name">Kepala Bengkel</field>
+            <field name="category_id" ref="module_category_bts_reminder"/>
+            <field name="implied_ids" eval="[(4, ref('group_frontline'))]"/>
+        </record>
+    </data>
+</odoo>

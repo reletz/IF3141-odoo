@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Form View -->
+        <record id="view_bts_reminder_parameter_form" model="ir.ui.view">
+            <field name="name">bts.reminder.parameter.form</field>
+            <field name="model">bts.reminder.parameter</field>
+            <field name="arch" type="xml">
+                <form string="Parameter Reminder">
+                    <sheet>
+                        <div class="oe_title mb-4">
+                            <h1>Konfigurasi Parameter Interval Reminder</h1>
+                            <div class="text-muted">Atur logika waktu pengiriman reminder untuk setiap jenis servis</div>
+                        </div>
+                        
+                        <div class="alert alert-info mt-3" role="alert">
+                            <strong>Penjelasan Parameter:</strong>
+                            <ul class="mb-0">
+                                <li><strong>Interval Hari:</strong> Jumlah hari sejak servis terakhir hingga servis berikutnya dijadwalkan</li>
+                                <li><strong>Offset:</strong> Jumlah hari sebelum jadwal servis untuk mulai mengirim reminder</li>
+                                <li><strong>Toleransi:</strong> Jumlah hari setelah jadwal servis yang masih dianggap dalam periode reminder</li>
+                            </ul>
+                        </div>
+
+                        <group>
+                            <group>
+                                <field name="service_type"/>
+                                <field name="is_active" widget="boolean_toggle"/>
+                            </group>
+                            <group>
+                                <field name="interval_days" placeholder="Contoh: 30"/>
+                                <field name="offset_days" placeholder="Contoh: 7"/>
+                                <field name="tolerance_days" placeholder="Contoh: 14"/>
+                            </group>
+                        </group>
+
+                        <group>
+                            <field name="description" placeholder="Catatan internal tambahan..."/>
+                        </group>
+                        
+                        <div class="alert alert-secondary mt-4" role="alert" invisible="not interval_days">
+                            <strong>Contoh Perhitungan:</strong><br/>
+                            Jika pelanggan terakhir servis tipe ini pada <strong>1 Januari 2026</strong>:
+                            <ul>
+                                <li>Tanggal jatuh tempo servis berikutnya: <strong>+<field name="interval_days" readonly="1" nolabel="1" class="oe_inline"/> hari</strong></li>
+                                <li>Reminder mulai dikirim: <strong>-<field name="offset_days" readonly="1" nolabel="1" class="oe_inline"/> hari</strong> dari jatuh tempo</li>
+                                <li>Reminder masih relevan hingga: <strong>+<field name="tolerance_days" readonly="1" nolabel="1" class="oe_inline"/> hari</strong> setelah toleransi</li>
+                            </ul>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Tree View -->
+        <record id="view_bts_reminder_parameter_tree" model="ir.ui.view">
+            <field name="name">bts.reminder.parameter.tree</field>
+            <field name="model">bts.reminder.parameter</field>
+            <field name="arch" type="xml">
+                <tree string="Parameter Interval Reminder">
+                    <field name="service_type"/>
+                    <field name="interval_days"/>
+                    <field name="offset_days"/>
+                    <field name="tolerance_days"/>
+                    <field name="is_active" widget="boolean_toggle"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_bts_reminder_parameter" model="ir.actions.act_window">
+            <field name="name">Konfigurasi Reminder</field>
+            <field name="res_model">bts.reminder.parameter</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="action_bts_reminder_parameter_tree" model="ir.actions.act_window.view">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_bts_reminder_parameter_tree"/>
+            <field name="act_window_id" ref="action_bts_reminder_parameter"/>
+        </record>
+        
+        <record id="action_bts_reminder_parameter_form" model="ir.actions.act_window.view">
+            <field name="sequence" eval="2"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_bts_reminder_parameter_form"/>
+            <field name="act_window_id" ref="action_bts_reminder_parameter"/>
+        </record>
+    </data>
+</odoo>

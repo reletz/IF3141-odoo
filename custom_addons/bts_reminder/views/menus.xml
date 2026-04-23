@@ -14,10 +14,12 @@
         <!-- Menu categories -->
         <menuitem id="menu_bts_reminder_data" name="Master Data" parent="menu_bts_reminder_root" sequence="5"/>
         <menuitem id="menu_bts_reminder_category" name="Reminders" parent="menu_bts_reminder_root" sequence="10"/>
+        <menuitem id="menu_bts_reminder_config" name="Configuration" parent="menu_bts_reminder_root" sequence="20" groups="bts_reminder.group_kepala_bengkel"/>
         
         <!-- Menu actions -->
         <menuitem id="menu_bts_customer_action" name="Pelanggan" parent="menu_bts_reminder_data" action="action_bts_customer" sequence="10"/>
         <menuitem id="menu_bts_service_history_action" name="Histori Servis" parent="menu_bts_reminder_data" action="action_bts_service_history" sequence="20"/>
         <menuitem id="menu_bts_reminder_action" name="All Reminders" parent="menu_bts_reminder_category" action="action_bts_reminder" sequence="10"/>
+        <menuitem id="menu_bts_reminder_parameter_action" name="Parameters" parent="menu_bts_reminder_config" action="action_bts_reminder_parameter" sequence="10"/>
     </data>
 </odoo>
