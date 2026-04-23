@@ -94,9 +94,20 @@
             <field name="name">Data Pelanggan</field>
             <field name="res_model">res.partner</field>
             <field name="view_mode">tree,form</field>
-            <field name="view_ids" eval="[(5, 0, 0),
-                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_bts_customer_tree')}),
-                (0, 0, {'view_mode': 'form', 'view_id': ref('view_bts_customer_form')})]"/>
+        </record>
+
+        <record id="action_bts_customer_tree" model="ir.actions.act_window.view">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_bts_customer_tree"/>
+            <field name="act_window_id" ref="action_bts_customer"/>
+        </record>
+
+        <record id="action_bts_customer_form" model="ir.actions.act_window.view">
+            <field name="sequence" eval="2"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_bts_customer_form"/>
+            <field name="act_window_id" ref="action_bts_customer"/>
         </record>
     </data>
 </odoo>
