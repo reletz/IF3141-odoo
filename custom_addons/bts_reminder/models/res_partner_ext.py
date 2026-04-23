@@ -29,7 +29,7 @@ class ResPartner(models.Model):
     last_service_date = fields.Date(string="Tanggal Servis Terakhir", compute="_compute_service_dates", store=True)
     first_service_date = fields.Date(string="Tanggal Servis Pertama", compute="_compute_service_dates", store=True)
     
-    service_history_ids = fields.One2many('bts.service.history', 'customer_id', string="Riwayat Servis")
+    service_history_ids = fields.One2many('bts.service.history', 'partner_id', string="Riwayat Servis")
 
     @api.depends('service_history_ids', 'service_history_ids.service_date')
     def _compute_service_dates(self):

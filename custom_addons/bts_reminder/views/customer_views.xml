@@ -46,10 +46,10 @@
                             </group>
                             <field name="service_history_ids" readonly="1" colspan="2" nolabel="1">
                                 <tree>
-                                    <field name="name" string="Tipe Servis"/>
-                                    <field name="km_interval" string="KM"/>
-                                    <field name="cost" string="Biaya"/>
                                     <field name="service_date" string="Tanggal"/>
+                                    <field name="service_type" string="Jenis Servis"/>
+                                    <field name="vehicle_mileage" string="KM"/>
+                                    <field name="total_cost" string="Biaya"/>
                                 </tree>
                             </field>
                         </group>
@@ -69,7 +69,7 @@
                     <field name="license_plate"/>
                     <field name="vehicle_type"/>
                     <field name="vehicle_year" optional="show"/>
-                    <field name="ring_1" optional="show"/>
+                    <field name="ring_1" optional="show" widget="boolean_toggle"/>
                     <field name="contact_preference" optional="hide"/>
                     <field name="last_service_date"/>
                     <field name="is_active_customer" widget="boolean_toggle"/>

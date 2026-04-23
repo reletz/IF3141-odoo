@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Form View -->
+        <record id="view_bts_service_history_form" model="ir.ui.view">
+            <field name="name">bts.service.history.form</field>
+            <field name="model">bts.service.history</field>
+            <field name="arch" type="xml">
+                <form string="Input Histori Servis">
+                    <sheet>
+                        <div class="oe_title mb-4">
+                            <h1>Input Histori Servis</h1>
+                            <div class="text-muted">Catat transaksi servis kendaraan pelanggan</div>
+                        </div>
+
+                        <group>
+                            <group string="Pilih Pelanggan">
+                                <field name="partner_id" 
+                                       options="{'no_create': True, 'no_open': True}" 
+                                       placeholder="Cari pelanggan..." nolabel="1"/>
+                            </group>
+                            <group string="Pelanggan Terpilih:" invisible="not partner_id" class="oe_inline">
+                                    <field name="partner_id" widget="res_partner_many2one" nolabel="1" readonly="1" force_save="1" options="{'no_open': True}"/>
+                            </group>
+                        </group>
+
+                        <group string="Data Servis">
+                            <group>
+                                <field name="service_date" required="1"/>
+                                <field name="vehicle_mileage" placeholder="Contoh: 5000"/>
+                            </group>
+                            <group>
+                                <field name="service_type" required="1"/>
+                            </group>
+                        </group>
+
+                        <group>
+                            <field name="complaint" placeholder="Keluhan atau masalah yang dilaporkan pelanggan"/>
+                            <field name="action_taken" required="1" placeholder="Detail tindakan servis yang dilakukan"/>
+                        </group>
+
+                        <group string="Spare Parts yang Digunakan">
+                            <field name="spare_parts" nolabel="1" placeholder="Nama spare part, qty, harga..."/>
+                        </group>
+
+                        <group string="Total Biaya" class="mt-4">
+                            <group>
+                                <field name="total_cost" string="Biaya Jasa Servis (Rp)"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Tree View -->
+        <record id="view_bts_service_history_tree" model="ir.ui.view">
+            <field name="name">bts.service.history.tree</field>
+            <field name="model">bts.service.history</field>
+            <field name="arch" type="xml">
+                <tree string="Histori Servis">
+                    <field name="service_date"/>
+                    <field name="partner_id"/>
+                    <field name="service_type"/>
+                    <field name="vehicle_mileage"/>
+                    <field name="total_cost" sum="Total"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Search View -->
+        <record id="view_bts_service_history_search" model="ir.ui.view">
+            <field name="name">bts.service.history.search</field>
+            <field name="model">bts.service.history</field>
+            <field name="arch" type="xml">
+                <search string="Cari Histori Servis">
+                    <field name="partner_id" string="Pelanggan"/>
+                    <field name="service_type" string="Jenis Servis"/>
+                    <filter string="Servis Ringan" name="type_ringan" domain="[('service_type', '=', 'ringan')]"/>
+                    <filter string="Servis Berat" name="type_berat" domain="[('service_type', '=', 'berat')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Pelanggan" name="group_partner" context="{'group_by': 'partner_id'}"/>
+                        <filter string="Tanggal" name="group_date" context="{'group_by': 'service_date'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_bts_service_history" model="ir.actions.act_window">
+            <field name="name">Histori Servis</field>
+            <field name="res_model">bts.service.history</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_bts_service_history_search"/>
+        </record>
+
+        <record id="action_bts_service_history_tree" model="ir.actions.act_window.view">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_bts_service_history_tree"/>
+            <field name="act_window_id" ref="action_bts_service_history"/>
+        </record>
+
+        <record id="action_bts_service_history_form" model="ir.actions.act_window.view">
+            <field name="sequence" eval="2"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_bts_service_history_form"/>
+            <field name="act_window_id" ref="action_bts_service_history"/>
+        </record>
+    </data>
+</odoo>
