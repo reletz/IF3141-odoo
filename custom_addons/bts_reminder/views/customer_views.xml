@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Form View for Customer Extension -->
+        <record id="view_bts_customer_form" model="ir.ui.view">
+            <field name="name">bts.customer.form</field>
+            <field name="model">res.partner</field>
+            <field name="arch" type="xml">
+                <form string="Input Data Pelanggan">
+                    <sheet>
+                        <div class="oe_title mb-4">
+                            <h1>Input Data Pelanggan</h1>
+                            <div class="text-muted">Tambahkan data pelanggan baru ke sistem</div>
+                        </div>
+                        
+                        <group string="Informasi Pelanggan">
+                            <group>
+                                <field name="name" string="Nama Lengkap" required="1" placeholder="Masukkan nama lengkap"/>
+                                <field name="vehicle_type" placeholder="Masukkan tipe kendaraan"/>
+                                <field name="vehicle_year" placeholder="2024" required="1"/>
+                                <field name="street" string="Alamat" placeholder="Masukkan alamat lengkap" required="1"/>
+                            </group>
+                            <group>
+                                <field name="whatsapp_number" placeholder="081234567890"/>
+                                <field name="license_plate" placeholder="D 1234 XY"/>
+                                <field name="contact_preference"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <field name="comment" string="Catatan Tambahan" placeholder="Catatan khusus atau informasi tambahan"/>
+                            <field name="notes" placeholder="Catatan internal untuk keperluan internal bengkel (opsional)"/>
+                            <field name="is_active_customer"/>
+                            <field name="ring_1"/>
+                        </group>
+                        
+                        <group string="Riwayat Servis (Otomatis dari Histori)">
+                            <div class="text-muted mb-2" colspan="2">
+                                * Field ini akan terisi otomatis setelah ada data servis kendaraan yang tercatat di sistem
+                            </div>
+                            <group>
+                                <field name="first_service_date" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="last_service_date" readonly="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Tree View -->
+        <record id="view_bts_customer_tree" model="ir.ui.view">
+            <field name="name">bts.customer.tree</field>
+            <field name="model">res.partner</field>
+            <field name="arch" type="xml">
+                <tree string="Daftar Pelanggan">
+                    <field name="name" string="Nama Lengkap"/>
+                    <field name="whatsapp_number"/>
+                    <field name="license_plate"/>
+                    <field name="vehicle_type"/>
+                    <field name="is_active_customer" widget="boolean_toggle"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_bts_customer" model="ir.actions.act_window">
+            <field name="name">Data Pelanggan</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('view_bts_customer_tree')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('view_bts_customer_form')})]"/>
+        </record>
+    </data>
+</odoo>
