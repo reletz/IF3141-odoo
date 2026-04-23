@@ -12,7 +12,14 @@ class BtsReminderLog(models.Model):
     partner_id = fields.Many2one('res.partner', string="Pelanggan", required=True, ondelete='cascade')
     whatsapp_number = fields.Char(string="Nomor WhatsApp", related='partner_id.whatsapp_number', readonly=True)
     vehicle_type = fields.Char(string="Tipe Kendaraan", related='partner_id.vehicle_type', readonly=True)
+    contact_preference = fields.Selection(string="Preferensi Kontak", related='partner_id.contact_preference', readonly=True)
+    ring_1 = fields.Boolean(string="Wilayah Ring 1", related='partner_id.ring_1', readonly=True)
     last_service_date = fields.Date(string="Tanggal Servis Terakhir", related='partner_id.last_service_date', readonly=True)
+    service_type = fields.Selection([
+        ('ringan', 'Servis Ringan'),
+        ('berat', 'Servis Berat')
+    ], string="Jenis Servis", compute='_compute_reminder_data', store=True)
+    service_visit_count = fields.Integer(string="Frekuensi Kunjungan", compute='_compute_reminder_data', store=True)
     days_until_due = fields.Integer(string="Sisa Hari ke Jatuh Tempo", compute='_compute_reminder_data', store=True)
     days_overdue = fields.Integer(string="Hari Keterlambatan", compute='_compute_reminder_data', store=True)
     status = fields.Selection([
@@ -30,7 +37,13 @@ class BtsReminderLog(models.Model):
         ('uniq_partner_log_date', 'unique(partner_id, log_date)', 'Log reminder pelanggan untuk hari ini sudah ada.')
     ]
 
-    @api.depends('partner_id', 'partner_id.last_service_date')
+    @api.depends(
+        'partner_id',
+        'partner_id.last_service_date',
+        'partner_id.service_history_ids',
+        'partner_id.service_history_ids.service_type',
+        'partner_id.service_history_ids.service_date'
+    )
     def _compute_reminder_data(self):
         today = fields.Date.context_today(self)
         service_history_model = self.env['bts.service.history']
@@ -40,6 +53,8 @@ class BtsReminderLog(models.Model):
         for record in self:
             record.days_until_due = 0
             record.days_overdue = 0
+            record.service_type = False
+            record.service_visit_count = 0
             record.status = False
             record.message_draft = False
 
@@ -50,6 +65,10 @@ class BtsReminderLog(models.Model):
                 ('partner_id', '=', record.partner_id.id)
             ], order='service_date desc, id desc', limit=1)
             service_type = latest_service.service_type or 'ringan'
+            record.service_type = service_type
+            record.service_visit_count = service_history_model.search_count([
+                ('partner_id', '=', record.partner_id.id)
+            ])
 
             parameter = reminder_param_model.search([
                 ('service_type', '=', service_type),
@@ -140,3 +159,43 @@ class BtsReminderLog(models.Model):
         action = self.env.ref('bts_reminder.action_bts_reminder_dashboard').read()[0]
         action['domain'] = [('id', 'in', created_logs.ids)]
         return action
+
+
+class BtsReminderSegmentationSummary(models.Model):
+    _name = 'bts.reminder.segmentation.summary'
+    _description = 'Ringkasan Segmentasi Reminder'
+
+    name = fields.Char(string="Nama", default="Ringkasan Segmentasi")
+    total_active_customers = fields.Integer(string="Total Pelanggan Aktif", compute='_compute_summary', readonly=True)
+    total_overdue = fields.Integer(string="Total Overdue", compute='_compute_summary', readonly=True)
+    total_sent_this_month = fields.Integer(string="Total Reminder Terkirim Bulan Ini", compute='_compute_summary', readonly=True)
+
+    def _compute_summary(self):
+        month_start = fields.Date.today().replace(day=1)
+        for record in self:
+            record.total_active_customers = self.env['res.partner'].search_count([
+                ('is_active_customer', '=', True)
+            ])
+            record.total_overdue = self.env['bts.reminder.log'].search_count([
+                ('status', '=', 'overdue'),
+                ('log_date', '=', fields.Date.context_today(self))
+            ])
+            record.total_sent_this_month = self.env['bts.reminder.log'].search_count([
+                ('send_status', '=', 'terkirim'),
+                ('write_date', '>=', month_start)
+            ])
+
+    @api.model
+    def action_open_segmentation_summary(self):
+        summary = self.search([], limit=1)
+        if not summary:
+            summary = self.create({})
+
+        action = self.env.ref('bts_reminder.action_bts_segmentation_summary').read()[0]
+        action['res_id'] = summary.id
+        action['views'] = [(self.env.ref('bts_reminder.view_bts_segmentation_summary_form').id, 'form')]
+        return action
+
+    def action_open_segmentation_insight(self):
+        self.ensure_one()
+        return self.env.ref('bts_reminder.action_bts_segmentation_insight').read()[0]

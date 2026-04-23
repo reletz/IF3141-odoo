@@ -21,6 +21,8 @@
         <menuitem id="menu_bts_service_history_action" name="Histori Servis" parent="menu_bts_reminder_data" action="action_bts_service_history" sequence="20"/>
         <menuitem id="menu_bts_reminder_action" name="All Reminders" parent="menu_bts_reminder_category" action="action_bts_reminder" sequence="10"/>
         <menuitem id="menu_bts_reminder_dashboard_action" name="Dashboard Harian" parent="menu_bts_reminder_category" action="action_bts_reminder_dashboard_generate" sequence="20" groups="bts_reminder.group_kepala_bengkel"/>
+        <menuitem id="menu_bts_reminder_overdue_action" name="Daftar Overdue" parent="menu_bts_reminder_category" action="action_bts_reminder_overdue" sequence="30" groups="bts_reminder.group_kepala_bengkel"/>
+        <menuitem id="menu_bts_segmentation_summary_action" name="Insight Segmentasi" parent="menu_bts_reminder_category" action="action_bts_segmentation_summary_generate" sequence="40" groups="bts_reminder.group_kepala_bengkel"/>
         <menuitem id="menu_bts_reminder_parameter_action" name="Parameters" parent="menu_bts_reminder_config" action="action_bts_reminder_parameter" sequence="10"/>
         <menuitem id="menu_bts_message_template_action" name="Template Pesan" parent="menu_bts_reminder_config" action="action_bts_message_template" sequence="20" groups="bts_reminder.group_kepala_bengkel"/>
     </data>

@@ -6,7 +6,7 @@
             <field name="name">bts.reminder.dashboard.tree</field>
             <field name="model">bts.reminder.log</field>
             <field name="arch" type="xml">
-                <tree string="Dashboard Reminder Harian" create="0" edit="0" delete="0">
+                <tree string="Dashboard Reminder Harian" create="0" edit="0" delete="0" decoration-muted="send_status == 'terkirim'">
                     <field name="status"/>
                     <field name="partner_id"/>
                     <field name="whatsapp_number"/>
@@ -16,7 +16,23 @@
                     <field name="days_overdue" optional="show"/>
                     <field name="message_draft"/>
                     <field name="send_status"/>
-                    <button name="action_mark_terkirim" type="object" string="Tandai Terkirim" class="btn-primary" invisible="send_status == 'terkirim'"/>
+                    <button name="action_mark_terkirim" type="object" string="Tandai Terkirim" class="btn-primary" confirm="Tandai reminder ini sebagai terkirim?" invisible="send_status == 'terkirim'"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Overdue Tree View -->
+        <record id="view_bts_reminder_overdue_tree" model="ir.ui.view">
+            <field name="name">bts.reminder.overdue.tree</field>
+            <field name="model">bts.reminder.log</field>
+            <field name="arch" type="xml">
+                <tree string="Daftar Pelanggan Overdue" create="0" edit="0" delete="0" default_order="days_overdue desc" decoration-danger="days_overdue &gt; 30" decoration-muted="send_status == 'terkirim'">
+                    <field name="partner_id" string="Pelanggan"/>
+                    <field name="whatsapp_number"/>
+                    <field name="last_service_date"/>
+                    <field name="days_overdue"/>
+                    <field name="send_status"/>
+                    <button name="action_mark_terkirim" type="object" string="Tandai Terkirim" class="btn-primary" confirm="Tandai reminder overdue ini sebagai terkirim?" invisible="send_status == 'terkirim'"/>
                 </tree>
             </field>
         </record>
@@ -28,7 +44,7 @@
             <field name="arch" type="xml">
                 <form string="Detail Reminder Harian" create="0" delete="0">
                     <header>
-                        <button name="action_mark_terkirim" type="object" string="Tandai Terkirim" class="btn-primary" invisible="send_status == 'terkirim'"/>
+                        <button name="action_mark_terkirim" type="object" string="Tandai Terkirim" class="btn-primary" confirm="Tandai reminder ini sebagai terkirim?" invisible="send_status == 'terkirim'"/>
                         <field name="send_status" widget="statusbar" statusbar_visible="belum_dikirim,terkirim"/>
                     </header>
                     <sheet>
@@ -62,17 +78,105 @@
                 <search string="Cari Reminder Harian">
                     <field name="partner_id"/>
                     <field name="whatsapp_number"/>
+                    <field name="log_date"/>
                     <separator/>
                     <filter string="Belum Dikirim" name="send_status_belum" domain="[('send_status', '=', 'belum_dikirim')]"/>
                     <filter string="Terkirim" name="send_status_terkirim" domain="[('send_status', '=', 'terkirim')]"/>
                     <separator/>
                     <filter string="Upcoming" name="status_upcoming" domain="[('status', '=', 'upcoming')]"/>
                     <filter string="Overdue" name="status_overdue" domain="[('status', '=', 'overdue')]"/>
+                    <filter string="Tanggal Dashboard" name="date_dashboard" date="log_date"/>
                     <group expand="0" string="Group By">
                         <filter string="Status" name="group_status" context="{'group_by': 'status'}"/>
                         <filter string="Status Kirim" name="group_send_status" context="{'group_by': 'send_status'}"/>
+                        <filter string="Jenis Servis" name="group_service_type" context="{'group_by': 'service_type'}"/>
+                        <filter string="Preferensi Kontak" name="group_contact_preference" context="{'group_by': 'contact_preference'}"/>
+                        <filter string="Ring 1" name="group_ring_1" context="{'group_by': 'ring_1'}"/>
+                        <filter string="Tanggal (Harian)" name="group_log_day" context="{'group_by': 'log_date:day'}"/>
+                        <filter string="Tanggal (Mingguan)" name="group_log_week" context="{'group_by': 'log_date:week'}"/>
+                        <filter string="Tanggal (Bulanan)" name="group_log_month" context="{'group_by': 'log_date:month'}"/>
                     </group>
                 </search>
+            </field>
+        </record>
+
+        <!-- Segmentation Summary Form -->
+        <record id="view_bts_segmentation_summary_form" model="ir.ui.view">
+            <field name="name">bts.segmentation.summary.form</field>
+            <field name="model">bts.reminder.segmentation.summary</field>
+            <field name="arch" type="xml">
+                <form string="Insight Segmentasi Pelanggan" create="0" edit="0" delete="0">
+                    <sheet>
+                        <div class="oe_title mb-4">
+                            <h1>Dashboard Segmentasi Pelanggan</h1>
+                            <div class="text-muted">Ringkasan dan analisis reminder servis</div>
+                        </div>
+
+                        <group col="3" string="Ringkasan">
+                            <group>
+                                <div class="o_form_label">Total Pelanggan Aktif</div>
+                                <field name="total_active_customers" readonly="1" class="oe_inline"/>
+                            </group>
+                            <group>
+                                <div class="o_form_label">Total Overdue</div>
+                                <field name="total_overdue" readonly="1" class="oe_inline"/>
+                            </group>
+                            <group>
+                                <div class="o_form_label">Total Reminder Terkirim Bulan Ini</div>
+                                <field name="total_sent_this_month" readonly="1" class="oe_inline"/>
+                            </group>
+                        </group>
+
+                        <group>
+                            <button type="object" name="action_open_segmentation_insight" string="Buka Analisis Segmentasi" class="btn-primary"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Segmentation Tree View -->
+        <record id="view_bts_segmentation_tree" model="ir.ui.view">
+            <field name="name">bts.segmentation.tree</field>
+            <field name="model">bts.reminder.log</field>
+            <field name="arch" type="xml">
+                <tree string="Analisis Segmentasi Reminder" create="0" edit="0" delete="0" decoration-muted="send_status == 'terkirim'">
+                    <field name="partner_id"/>
+                    <field name="service_type"/>
+                    <field name="contact_preference"/>
+                    <field name="ring_1"/>
+                    <field name="send_status"/>
+                    <field name="status"/>
+                    <field name="service_visit_count"/>
+                    <field name="days_overdue"/>
+                    <field name="log_date"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Segmentation Graph View -->
+        <record id="view_bts_segmentation_graph" model="ir.ui.view">
+            <field name="name">bts.segmentation.graph</field>
+            <field name="model">bts.reminder.log</field>
+            <field name="arch" type="xml">
+                <graph string="Distribusi Frekuensi Kunjungan" type="bar">
+                    <field name="partner_id" type="row"/>
+                    <field name="service_visit_count" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <!-- Segmentation Pivot View -->
+        <record id="view_bts_segmentation_pivot" model="ir.ui.view">
+            <field name="name">bts.segmentation.pivot</field>
+            <field name="model">bts.reminder.log</field>
+            <field name="arch" type="xml">
+                <pivot string="Pivot Segmentasi Reminder">
+                    <field name="service_type" type="row"/>
+                    <field name="send_status" type="col"/>
+                    <field name="service_visit_count" type="measure"/>
+                    <field name="days_overdue" type="measure"/>
+                </pivot>
             </field>
         </record>
 
@@ -84,6 +188,68 @@
             <field name="search_view_id" ref="view_bts_reminder_dashboard_search"/>
             <field name="context">{'search_default_group_status': 1, 'search_default_send_status_belum': 1}</field>
             <field name="groups_id" eval="[(4, ref('bts_reminder.group_kepala_bengkel'))]"/>
+        </record>
+
+        <record id="action_bts_reminder_overdue" model="ir.actions.act_window">
+            <field name="name">Pelanggan Overdue</field>
+            <field name="res_model">bts.reminder.log</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('status', '=', 'overdue')]</field>
+            <field name="context">{'search_default_status_overdue': 1}</field>
+            <field name="search_view_id" ref="view_bts_reminder_dashboard_search"/>
+            <field name="groups_id" eval="[(4, ref('bts_reminder.group_kepala_bengkel'))]"/>
+        </record>
+
+        <record id="action_bts_reminder_overdue_tree" model="ir.actions.act_window.view">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_bts_reminder_overdue_tree"/>
+            <field name="act_window_id" ref="action_bts_reminder_overdue"/>
+        </record>
+
+        <record id="action_bts_segmentation_summary" model="ir.actions.act_window">
+            <field name="name">Ringkasan Segmentasi</field>
+            <field name="res_model">bts.reminder.segmentation.summary</field>
+            <field name="view_mode">form</field>
+            <field name="groups_id" eval="[(4, ref('bts_reminder.group_kepala_bengkel'))]"/>
+        </record>
+
+        <record id="action_bts_segmentation_summary_generate" model="ir.actions.server">
+            <field name="name">Buka Ringkasan Segmentasi</field>
+            <field name="model_id" ref="model_bts_reminder_segmentation_summary"/>
+            <field name="state">code</field>
+            <field name="code">action = model.action_open_segmentation_summary()</field>
+            <field name="groups_id" eval="[(4, ref('bts_reminder.group_kepala_bengkel'))]"/>
+        </record>
+
+        <record id="action_bts_segmentation_insight" model="ir.actions.act_window">
+            <field name="name">Analisis Segmentasi Pelanggan</field>
+            <field name="res_model">bts.reminder.log</field>
+            <field name="view_mode">tree,graph,pivot</field>
+            <field name="search_view_id" ref="view_bts_reminder_dashboard_search"/>
+            <field name="context">{'search_default_date_dashboard': 1, 'search_default_group_service_type': 1}</field>
+            <field name="groups_id" eval="[(4, ref('bts_reminder.group_kepala_bengkel'))]"/>
+        </record>
+
+        <record id="action_bts_segmentation_insight_tree" model="ir.actions.act_window.view">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_bts_segmentation_tree"/>
+            <field name="act_window_id" ref="action_bts_segmentation_insight"/>
+        </record>
+
+        <record id="action_bts_segmentation_insight_graph" model="ir.actions.act_window.view">
+            <field name="sequence" eval="2"/>
+            <field name="view_mode">graph</field>
+            <field name="view_id" ref="view_bts_segmentation_graph"/>
+            <field name="act_window_id" ref="action_bts_segmentation_insight"/>
+        </record>
+
+        <record id="action_bts_segmentation_insight_pivot" model="ir.actions.act_window.view">
+            <field name="sequence" eval="3"/>
+            <field name="view_mode">pivot</field>
+            <field name="view_id" ref="view_bts_segmentation_pivot"/>
+            <field name="act_window_id" ref="action_bts_segmentation_insight"/>
         </record>
 
         <record id="action_bts_reminder_dashboard_generate" model="ir.actions.server">
