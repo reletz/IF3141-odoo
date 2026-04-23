@@ -14,6 +14,8 @@
         'views/customer_views.xml',
         'views/service_history_views.xml',
         'views/reminder_parameter_views.xml',
+        'views/message_template_views.xml',
+        'views/dashboard_views.xml',
         'views/menus.xml',
     ],
     'installable': True,

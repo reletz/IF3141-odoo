@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Tree View -->
+        <record id="view_bts_reminder_dashboard_tree" model="ir.ui.view">
+            <field name="name">bts.reminder.dashboard.tree</field>
+            <field name="model">bts.reminder.log</field>
+            <field name="arch" type="xml">
+                <tree string="Dashboard Reminder Harian" create="0" edit="0" delete="0">
+                    <field name="status"/>
+                    <field name="partner_id"/>
+                    <field name="whatsapp_number"/>
+                    <field name="vehicle_type" optional="show"/>
+                    <field name="last_service_date" optional="show"/>
+                    <field name="days_until_due" optional="show"/>
+                    <field name="days_overdue" optional="show"/>
+                    <field name="message_draft"/>
+                    <field name="send_status"/>
+                    <button name="action_mark_terkirim" type="object" string="Tandai Terkirim" class="btn-primary" invisible="send_status == 'terkirim'"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Form View -->
+        <record id="view_bts_reminder_dashboard_form" model="ir.ui.view">
+            <field name="name">bts.reminder.dashboard.form</field>
+            <field name="model">bts.reminder.log</field>
+            <field name="arch" type="xml">
+                <form string="Detail Reminder Harian" create="0" delete="0">
+                    <header>
+                        <button name="action_mark_terkirim" type="object" string="Tandai Terkirim" class="btn-primary" invisible="send_status == 'terkirim'"/>
+                        <field name="send_status" widget="statusbar" statusbar_visible="belum_dikirim,terkirim"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="log_date" readonly="1"/>
+                                <field name="status" readonly="1"/>
+                                <field name="partner_id" readonly="1"/>
+                                <field name="whatsapp_number" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="vehicle_type" readonly="1"/>
+                                <field name="last_service_date" readonly="1"/>
+                                <field name="days_until_due" readonly="1"/>
+                                <field name="days_overdue" readonly="1"/>
+                            </group>
+                        </group>
+                        <group string="Draft Pesan WhatsApp">
+                            <field name="message_draft" nolabel="1" readonly="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Search View -->
+        <record id="view_bts_reminder_dashboard_search" model="ir.ui.view">
+            <field name="name">bts.reminder.dashboard.search</field>
+            <field name="model">bts.reminder.log</field>
+            <field name="arch" type="xml">
+                <search string="Cari Reminder Harian">
+                    <field name="partner_id"/>
+                    <field name="whatsapp_number"/>
+                    <separator/>
+                    <filter string="Belum Dikirim" name="send_status_belum" domain="[('send_status', '=', 'belum_dikirim')]"/>
+                    <filter string="Terkirim" name="send_status_terkirim" domain="[('send_status', '=', 'terkirim')]"/>
+                    <separator/>
+                    <filter string="Upcoming" name="status_upcoming" domain="[('status', '=', 'upcoming')]"/>
+                    <filter string="Overdue" name="status_overdue" domain="[('status', '=', 'overdue')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Status" name="group_status" context="{'group_by': 'status'}"/>
+                        <filter string="Status Kirim" name="group_send_status" context="{'group_by': 'send_status'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_bts_reminder_dashboard" model="ir.actions.act_window">
+            <field name="name">Dashboard Reminder Harian</field>
+            <field name="res_model">bts.reminder.log</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_bts_reminder_dashboard_search"/>
+            <field name="context">{'search_default_group_status': 1, 'search_default_send_status_belum': 1}</field>
+            <field name="groups_id" eval="[(4, ref('bts_reminder.group_kepala_bengkel'))]"/>
+        </record>
+
+        <record id="action_bts_reminder_dashboard_generate" model="ir.actions.server">
+            <field name="name">Buka Dashboard Reminder Harian</field>
+            <field name="model_id" ref="model_bts_reminder_log"/>
+            <field name="state">code</field>
+            <field name="code">action = model.action_generate_daily_dashboard()</field>
+            <field name="groups_id" eval="[(4, ref('bts_reminder.group_kepala_bengkel'))]"/>
+        </record>
+
+        <record id="action_bts_reminder_dashboard_tree" model="ir.actions.act_window.view">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_bts_reminder_dashboard_tree"/>
+            <field name="act_window_id" ref="action_bts_reminder_dashboard"/>
+        </record>
+
+        <record id="action_bts_reminder_dashboard_form" model="ir.actions.act_window.view">
+            <field name="sequence" eval="2"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_bts_reminder_dashboard_form"/>
+            <field name="act_window_id" ref="action_bts_reminder_dashboard"/>
+        </record>
+    </data>
+</odoo>

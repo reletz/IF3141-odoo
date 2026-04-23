@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Form View -->
+        <record id="view_bts_message_template_form" model="ir.ui.view">
+            <field name="name">bts.message.template.form</field>
+            <field name="model">bts.message.template</field>
+            <field name="arch" type="xml">
+                <form string="Template Pesan WhatsApp">
+                    <sheet>
+                        <div class="oe_title mb-4">
+                            <h1>Template Pesan WhatsApp</h1>
+                            <div class="text-muted">Kelola template pesan reminder yang dapat dipersonalisasi</div>
+                        </div>
+
+                        <group>
+                            <group>
+                                <field name="name"/>
+                                <field name="service_type"/>
+                            </group>
+                            <group>
+                                <field name="is_active" widget="boolean_toggle"/>
+                            </group>
+                        </group>
+
+                        <group string="Isi Pesan">
+                            <field name="body" nolabel="1" placeholder="Contoh: Halo {nama}, motor {tipe_kendaraan} dengan nomor polisi {nomor_polisi} sudah mendekati jadwal servis berikutnya pada {hari_jatuh_tempo}." style="min-height: 280px;"/>
+                        </group>
+
+                        <group string="Preview Placeholder">
+                            <field name="available_placeholders" nolabel="1" readonly="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Tree View -->
+        <record id="view_bts_message_template_tree" model="ir.ui.view">
+            <field name="name">bts.message.template.tree</field>
+            <field name="model">bts.message.template</field>
+            <field name="arch" type="xml">
+                <tree string="Daftar Template Pesan WhatsApp">
+                    <field name="name"/>
+                    <field name="service_type"/>
+                    <field name="is_active" widget="boolean_toggle"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Action -->
+        <record id="action_bts_message_template" model="ir.actions.act_window">
+            <field name="name">Template Pesan</field>
+            <field name="res_model">bts.message.template</field>
+            <field name="view_mode">tree,form</field>
+            <field name="groups_id" eval="[(4, ref('bts_reminder.group_kepala_bengkel'))]"/>
+        </record>
+
+        <record id="action_bts_message_template_tree" model="ir.actions.act_window.view">
+            <field name="sequence" eval="1"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_bts_message_template_tree"/>
+            <field name="act_window_id" ref="action_bts_message_template"/>
+        </record>
+
+        <record id="action_bts_message_template_form" model="ir.actions.act_window.view">
+            <field name="sequence" eval="2"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_bts_message_template_form"/>
+            <field name="act_window_id" ref="action_bts_message_template"/>
+        </record>
+    </data>
+</odoo>
