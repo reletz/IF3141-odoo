@@ -68,6 +68,9 @@
                     <field name="whatsapp_number"/>
                     <field name="license_plate"/>
                     <field name="vehicle_type"/>
+                    <field name="vehicle_year" optional="show"/>
+                    <field name="ring_1" optional="show"/>
+                    <field name="contact_preference" optional="hide"/>
                     <field name="last_service_date"/>
                     <field name="is_active_customer" widget="boolean_toggle"/>
                 </tree>
