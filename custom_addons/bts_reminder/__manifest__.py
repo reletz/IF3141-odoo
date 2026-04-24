@@ -17,8 +17,6 @@
         'views/message_template_views.xml',
         'views/dashboard_views.xml',
         'views/menus.xml',
-    ],
-    'demo': [
         'data/demo.xml',
     ],
     'installable': True,
