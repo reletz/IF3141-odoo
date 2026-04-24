@@ -18,6 +18,9 @@
         'views/dashboard_views.xml',
         'views/menus.xml',
     ],
+    'demo': [
+        'data/demo.xml',
+    ],
     'installable': True,
     'application': True,
     'license': 'LGPL-3',
