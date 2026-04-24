@@ -111,6 +111,18 @@ Jangan tunggu sampai rusak, yuk segera kunjungi bengkel kami sebelum kendalanya 
             <field name="notes">Pelanggan tidak ingin direminder (opt-out)</field>
         </record>
 
+        <record id="customer_eko_demo" model="res.partner">
+            <field name="name">Eko Susanto</field>
+            <field name="whatsapp_number">081999888777</field>
+            <field name="vehicle_type">Honda CB150R</field>
+            <field name="license_plate">D 1122 ZZ</field>
+            <field name="vehicle_year">2019</field>
+            <field name="contact_preference">sore</field>
+            <field name="is_active_customer">True</field>
+            <field name="ring_1">True</field>
+            <field name="street">Cileunyi, Sumedang</field>
+        </record>
+
         <!-- 4. Histori Servis Pelanggan (Tanggal Simulasi) -->
         
         <!-- Budi: Servis 15 hari lalu -> Belum saatnya direminder (Baru setengah interval) -->
@@ -177,6 +189,37 @@ Jangan tunggu sampai rusak, yuk segera kunjungi bengkel kami sebelum kendalanya 
             <field name="complaint">Ganti oli</field>
             <field name="action_taken">Ganti oli mesin</field>
             <field name="total_cost">65000</field>
+        </record>
+
+        <record id="histori_eko_demo_berat" model="bts.service.history">
+            <field name="partner_id" ref="customer_eko_demo"/>
+            <field name="service_type">berat</field>
+            <field name="service_date">2025-10-25</field>
+            <field name="vehicle_mileage">40000</field>
+            <field name="complaint">Mesin agak kasar</field>
+            <field name="action_taken">Overhaul kopling, Cek sistem injeksi</field>
+            <field name="total_cost">400000</field>
+        </record>
+
+        <!-- 5. Reminder Logs (All Reminders & Overdue) -->
+        <record id="reminder_log_siti" model="bts.reminder.log">
+            <field name="partner_id" ref="customer_siti_demo"/>
+            <field name="send_status">belum_dikirim</field>
+        </record>
+        
+        <record id="reminder_log_ahmad" model="bts.reminder.log">
+            <field name="partner_id" ref="customer_ahmad_demo"/>
+            <field name="send_status">belum_dikirim</field>
+        </record>
+
+        <record id="reminder_log_rina" model="bts.reminder.log">
+            <field name="partner_id" ref="customer_rina_demo"/>
+            <field name="send_status">belum_dikirim</field>
+        </record>
+
+        <record id="reminder_log_eko" model="bts.reminder.log">
+            <field name="partner_id" ref="customer_eko_demo"/>
+            <field name="send_status">terkirim</field>
         </record>
 
     </data>
