@@ -205,21 +205,25 @@ Jangan tunggu sampai rusak, yuk segera kunjungi bengkel kami sebelum kendalanya 
         <record id="reminder_log_siti" model="bts.reminder.log">
             <field name="partner_id" ref="customer_siti_demo"/>
             <field name="send_status">belum_dikirim</field>
+            <field name="log_date">2026-04-20</field>
         </record>
         
         <record id="reminder_log_ahmad" model="bts.reminder.log">
             <field name="partner_id" ref="customer_ahmad_demo"/>
             <field name="send_status">belum_dikirim</field>
+            <field name="log_date">2026-04-20</field>
         </record>
 
         <record id="reminder_log_rina" model="bts.reminder.log">
             <field name="partner_id" ref="customer_rina_demo"/>
             <field name="send_status">belum_dikirim</field>
+            <field name="log_date">2026-04-20</field>
         </record>
 
         <record id="reminder_log_eko" model="bts.reminder.log">
             <field name="partner_id" ref="customer_eko_demo"/>
             <field name="send_status">terkirim</field>
+            <field name="log_date">2026-04-20</field>
         </record>
 
     </data>
