@@ -151,7 +151,7 @@ Jangan tunggu sampai rusak, yuk segera kunjungi bengkel kami sebelum kendalanya 
         <record id="histori_ahmad_demo_ringan" model="bts.service.history">
             <field name="partner_id" ref="customer_ahmad_demo"/>
             <field name="service_type">ringan</field>
-            <field name="service_date">2026-03-20</field>
+            <field name="service_date">2026-03-10</field>
             <field name="vehicle_mileage">21000</field>
             <field name="complaint">Rem depan bunyi</field>
             <field name="action_taken">Servis ringan, ganti kampas rem depan</field>
@@ -173,7 +173,7 @@ Jangan tunggu sampai rusak, yuk segera kunjungi bengkel kami sebelum kendalanya 
         <record id="histori_rina_demo_berat" model="bts.service.history">
             <field name="partner_id" ref="customer_rina_demo"/>
             <field name="service_type">berat</field>
-            <field name="service_date">2025-10-21</field>
+            <field name="service_date">2025-09-01</field>
             <field name="vehicle_mileage">32000</field>
             <field name="complaint">Getar saat tarikan awal</field>
             <field name="action_taken">Overhaul CVT, Ganti Roller</field>
