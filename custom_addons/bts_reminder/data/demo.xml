@@ -3,7 +3,7 @@
     <data noupdate="1">
         
         <!-- 1. Parameter Reminder Interval -->
-        <record id="reminder_param_ringan_demo" model="bts.reminder.parameter">
+        <record id="reminder_param_ringan_demo_v2" model="bts.reminder.parameter">
             <field name="service_type">ringan</field>
             <field name="interval_days">30</field>
             <field name="offset_days">3</field>
@@ -11,7 +11,7 @@
             <field name="description">Parameter standar untuk servis ringan bulanan (Ganti oli berkala).</field>
         </record>
 
-        <record id="reminder_param_berat_demo" model="bts.reminder.parameter">
+        <record id="reminder_param_berat_demo_v2" model="bts.reminder.parameter">
             <field name="service_type">berat</field>
             <field name="interval_days">180</field>
             <field name="offset_days">7</field>
@@ -50,7 +50,7 @@ Jangan tunggu sampai rusak, yuk segera kunjungi bengkel kami sebelum kendalanya 
         </record>
 
         <!-- 3. Master Data Pelanggan -->
-        <record id="customer_budi_demo" model="res.partner">
+        <record id="customer_budi_demo_v2" model="res.partner">
             <field name="name">Budi Santoso</field>
             <field name="whatsapp_number">081234567890</field>
             <field name="vehicle_type">Honda Beat</field>
@@ -62,7 +62,7 @@ Jangan tunggu sampai rusak, yuk segera kunjungi bengkel kami sebelum kendalanya 
             <field name="street">Jl. Raya Jatinangor No. 123, Sumedang</field>
         </record>
 
-        <record id="customer_siti_demo" model="res.partner">
+        <record id="customer_siti_demo_v2" model="res.partner">
             <field name="name">Siti Nurhaliza</field>
             <field name="whatsapp_number">085678901234</field>
             <field name="vehicle_type">Honda Vario 160</field>
@@ -74,7 +74,7 @@ Jangan tunggu sampai rusak, yuk segera kunjungi bengkel kami sebelum kendalanya 
             <field name="street">Perumahan Jatinangor Indah Blok A/5</field>
         </record>
 
-        <record id="customer_ahmad_demo" model="res.partner">
+        <record id="customer_ahmad_demo_v2" model="res.partner">
             <field name="name">Ahmad Wijaya</field>
             <field name="whatsapp_number">087890123456</field>
             <field name="vehicle_type">Honda PCX 160</field>
@@ -86,7 +86,7 @@ Jangan tunggu sampai rusak, yuk segera kunjungi bengkel kami sebelum kendalanya 
             <field name="street">Jl. Kolonel Ahmad Syam, Cikeruh</field>
         </record>
 
-        <record id="customer_rina_demo" model="res.partner">
+        <record id="customer_rina_demo_v2" model="res.partner">
             <field name="name">Rina Melati</field>
             <field name="whatsapp_number">089812345678</field>
             <field name="vehicle_type">Honda Scoopy</field>
@@ -98,7 +98,7 @@ Jangan tunggu sampai rusak, yuk segera kunjungi bengkel kami sebelum kendalanya 
             <field name="street">Sayang, Jatinangor</field>
         </record>
 
-        <record id="customer_dodi_demo" model="res.partner">
+        <record id="customer_dodi_demo_v2" model="res.partner">
             <field name="name">Dodic Kurniawan</field>
             <field name="whatsapp_number">081345678901</field>
             <field name="vehicle_type">Honda Supra X</field>
@@ -114,10 +114,10 @@ Jangan tunggu sampai rusak, yuk segera kunjungi bengkel kami sebelum kendalanya 
         <!-- 4. Histori Servis Pelanggan (Tanggal Simulasi) -->
         
         <!-- Budi: Servis 15 hari lalu -> Belum saatnya direminder (Baru setengah interval) -->
-        <record id="histori_budi_demo" model="bts.service.history">
-            <field name="partner_id" ref="customer_budi_demo"/>
+        <record id="histori_budi_demo_v2" model="bts.service.history">
+            <field name="partner_id" ref="customer_budi_demo_v2"/>
             <field name="service_type">ringan</field>
-            <field name="service_date" eval="(DateTime.today() - relativedelta(days=15)).strftime('%Y-%m-%d')"/>
+            <field name="service_date" eval="(datetime.datetime.today() - datetime.timedelta(days=15)).strftime('%Y-%m-%d')"/>
             <field name="vehicle_mileage">12000</field>
             <field name="complaint">Tarikan agak berat</field>
             <field name="action_taken">Ganti oli mesin, bersihkan CVT</field>
@@ -125,10 +125,10 @@ Jangan tunggu sampai rusak, yuk segera kunjungi bengkel kami sebelum kendalanya 
         </record>
 
         <!-- Siti: Servis 28 hari lalu -> Masuk Offset H-2 Reminder Servis Bulanan -->
-        <record id="histori_siti_demo" model="bts.service.history">
-            <field name="partner_id" ref="customer_siti_demo"/>
+        <record id="histori_siti_demo_v2" model="bts.service.history">
+            <field name="partner_id" ref="customer_siti_demo_v2"/>
             <field name="service_type">ringan</field>
-            <field name="service_date" eval="(DateTime.today() - relativedelta(days=28)).strftime('%Y-%m-%d')"/>
+            <field name="service_date" eval="(datetime.datetime.today() - datetime.timedelta(days=28)).strftime('%Y-%m-%d')"/>
             <field name="vehicle_mileage">8500</field>
             <field name="complaint">Servis rutin</field>
             <field name="action_taken">Ganti oli mesin dan gardan</field>
@@ -136,10 +136,10 @@ Jangan tunggu sampai rusak, yuk segera kunjungi bengkel kami sebelum kendalanya 
         </record>
 
         <!-- Ahmad: Servis 35 hari lalu -> Jatuh tempo sebulan kelewat 5 hari (Overdue tapi msh masuk batas toleransi 7 hari) -->
-        <record id="histori_ahmad_demo_ringan" model="bts.service.history">
-            <field name="partner_id" ref="customer_ahmad_demo"/>
+        <record id="histori_ahmad_demo_v2_ringan" model="bts.service.history">
+            <field name="partner_id" ref="customer_ahmad_demo_v2"/>
             <field name="service_type">ringan</field>
-            <field name="service_date" eval="(DateTime.today() - relativedelta(days=35)).strftime('%Y-%m-%d')"/>
+            <field name="service_date" eval="(datetime.datetime.today() - datetime.timedelta(days=35)).strftime('%Y-%m-%d')"/>
             <field name="vehicle_mileage">21000</field>
             <field name="complaint">Rem depan bunyi</field>
             <field name="action_taken">Servis ringan, ganti kampas rem depan</field>
@@ -147,10 +147,10 @@ Jangan tunggu sampai rusak, yuk segera kunjungi bengkel kami sebelum kendalanya 
         </record>
         
         <!-- Ahmad (Riwayat Lampau): Servis Besar Terakhir 175 hari lalu (Masuk offset H-5 Servis 180 hari) -->
-        <record id="histori_ahmad_demo_berat" model="bts.service.history">
-            <field name="partner_id" ref="customer_ahmad_demo"/>
+        <record id="histori_ahmad_demo_v2_berat" model="bts.service.history">
+            <field name="partner_id" ref="customer_ahmad_demo_v2"/>
             <field name="service_type">berat</field>
-            <field name="service_date" eval="(DateTime.today() - relativedelta(days=175)).strftime('%Y-%m-%d')"/>
+            <field name="service_date" eval="(datetime.datetime.today() - datetime.timedelta(days=175)).strftime('%Y-%m-%d')"/>
             <field name="vehicle_mileage">15000</field>
             <field name="complaint">Tarikan tersendat dan mati mendadak</field>
             <field name="action_taken">Servis besar, bersihkan injektor, ganti V-Belt</field>
@@ -158,10 +158,10 @@ Jangan tunggu sampai rusak, yuk segera kunjungi bengkel kami sebelum kendalanya 
         </record>
 
         <!-- Rina: Servis Berat 185 hari lalu -> Overdue toleransi -->
-        <record id="histori_rina_demo_berat" model="bts.service.history">
-            <field name="partner_id" ref="customer_rina_demo"/>
+        <record id="histori_rina_demo_v2_berat" model="bts.service.history">
+            <field name="partner_id" ref="customer_rina_demo_v2"/>
             <field name="service_type">berat</field>
-            <field name="service_date" eval="(DateTime.today() - relativedelta(days=185)).strftime('%Y-%m-%d')"/>
+            <field name="service_date" eval="(datetime.datetime.today() - datetime.timedelta(days=185)).strftime('%Y-%m-%d')"/>
             <field name="vehicle_mileage">32000</field>
             <field name="complaint">Getar saat tarikan awal</field>
             <field name="action_taken">Overhaul CVT, Ganti Roller</field>
@@ -169,10 +169,10 @@ Jangan tunggu sampai rusak, yuk segera kunjungi bengkel kami sebelum kendalanya 
         </record>
 
         <!-- Dodi: Opt Out Customer (Servis 29 hari lalu) -->
-        <record id="histori_dodi_demo" model="bts.service.history">
-            <field name="partner_id" ref="customer_dodi_demo"/>
+        <record id="histori_dodi_demo_v2" model="bts.service.history">
+            <field name="partner_id" ref="customer_dodi_demo_v2"/>
             <field name="service_type">ringan</field>
-            <field name="service_date" eval="(DateTime.today() - relativedelta(days=29)).strftime('%Y-%m-%d')"/>
+            <field name="service_date" eval="(datetime.datetime.today() - datetime.timedelta(days=29)).strftime('%Y-%m-%d')"/>
             <field name="vehicle_mileage">45000</field>
             <field name="complaint">Ganti oli</field>
             <field name="action_taken">Ganti oli mesin</field>
